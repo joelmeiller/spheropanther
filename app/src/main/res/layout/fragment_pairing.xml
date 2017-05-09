@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context="layout.PairingFragment">
 
     <TextView
@@ -34,6 +35,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="62dp"
         android:text="Please wait..."
+        android:textColor="@android:color/white"
         android:textSize="18sp" />
 
     <LinearLayout
@@ -53,10 +55,10 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_weight="1"
-            android:background="@color/colorPrimary"
+            android:background="@color/colorAccent"
             android:onClick="onStartClicked"
             android:text="Start Spheropanther"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/colorPrimaryDark" />
     </LinearLayout>
 
 </RelativeLayout>

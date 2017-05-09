@@ -19,6 +19,7 @@ public class ControllerView extends View {
 
     private static String TAG = ControllerView.class.toString();
 
+    private static int MARGIN_GRID = 80;
     private static int RADIUS_GRID = 150;
     private static int RADIUS_TOUCH = 20;
 
@@ -39,6 +40,11 @@ public class ControllerView extends View {
         int x = (int) event.getX();
         int y = (int) event.getY();
 
+        if (lastPosition != null && (y < RADIUS_TOUCH + 10 || y > 2 * (RADIUS_GRID + MARGIN_GRID))) {
+            x = lastPosition.x;
+            y = lastPosition.y;
+        }
+
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 lastPosition = new Point(x, y);
@@ -50,7 +56,7 @@ public class ControllerView extends View {
                 lastPosition = null;
         }
 
-        invalidate();
+        postInvalidate();
 
         return true;
     }
@@ -60,7 +66,7 @@ public class ControllerView extends View {
         super.onDraw(canvas);
 
         int xC = (int) canvas.getWidth() / 2;
-        int yC = RADIUS_GRID + 20;
+        int yC = RADIUS_GRID + MARGIN_GRID;
 
         // Draw controll cross
         drawControllCross(canvas, xC, yC);
