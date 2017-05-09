@@ -1,0 +1,28 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    tools:context="layout.AimFragment">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/aim_fragment_title"
+        android:textAlignment="center"
+        android:textColor="@color/colorAccent"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <RelativeLayout
+        android:id="@+id/controllerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/control_margin"
+        android:layout_weight="0.44">
+
+    </RelativeLayout>
+
+</LinearLayout>

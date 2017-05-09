@@ -1,4 +1,4 @@
-package ch.fhnw.edu.emoba.spheropanther;
+package ch.fhnw.edu.emoba.spheropantherapp;
 
 import org.junit.Test;
 

@@ -1,32 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="ch.fhnw.edu.emoba.spheropanther.PairingActivity">
+    tools:context="ch.fhnw.edu.emoba.spheropantherapp.PairingActivity">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="Pairing! Please wait..."
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="37dp"
-        android:id="@+id/pairing_text" />
+    <fragment
+        android:id="@+id/pairing_fragment_container"
+        android:name="layout.PairingFragment"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        tools:layout="@layout/fragment_pairing" />
 
-    <Button
-        android:id="@+id/goOnButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="onGoOnClicked"
-        android:text="@string/goOn"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true" />
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>

@@ -1,4 +1,4 @@
-package ch.fhnw.edu.emoba.spheropanther;
+package ch.fhnw.edu.emoba.spheropantherapp;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("ch.fhnw.edu.emoba.spheropanther", appContext.getPackageName());
+        assertEquals("ch.fhnw.edu.emoba.spheropantherapp", appContext.getPackageName());
     }
 }
