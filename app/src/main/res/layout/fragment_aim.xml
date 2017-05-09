@@ -10,6 +10,7 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="@string/aim_fragment_title"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
