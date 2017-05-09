@@ -6,6 +6,8 @@ import android.graphics.Paint;
 import android.graphics.Color;
 import android.view.View;
 
+import ch.fhnw.edu.emoba.spheropantherapp.R;
+
 /**
  * Created by Joel on 09/05/17.
  */
@@ -19,7 +21,7 @@ public class ControllerView extends View {
 
         // create the Paint and set its color
         paint = new Paint();
-        paint.setColor(Color.GRAY);
+        paint.setColor(Color.BLUE);
     }
 
     @Override
