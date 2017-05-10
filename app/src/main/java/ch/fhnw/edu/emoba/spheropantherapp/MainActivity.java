@@ -18,10 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 
 import layout.AimFragment;
+import layout.SensorFragment;
 import layout.TouchFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements AimFragment.OnFragmentInteractionListener, TouchFragment.OnFragmentInteractionListener {
+        implements AimFragment.OnFragmentInteractionListener, TouchFragment.OnFragmentInteractionListener, SensorFragment.OnFragmentInteractionListener {
 
     private static String TAG = MainActivity.class.toString();
 
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity
                 case 1:
                     return (Fragment) TouchFragment.newInstance();
                 default:
-                    return (Fragment) AimFragment.newInstance();
+                    return (Fragment) SensorFragment.newInstance();
             }
         }
 
@@ -123,7 +124,7 @@ public class MainActivity extends AppCompatActivity
                 case 1:
                     return "TOUCH";
                 case 2:
-                    return "SENSORS";
+                    return "SENSOR";
             }
             return null;
         }

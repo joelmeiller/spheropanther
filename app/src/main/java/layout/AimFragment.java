@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import ch.fhnw.edu.emoba.spheropantherapp.R;
 
@@ -51,9 +50,9 @@ public class AimFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_aim, container, false);
 
-        RelativeLayout controllerLayout = (RelativeLayout) view.findViewById(R.id.controllerLayout);
+        RelativeLayout controllerLayout = (RelativeLayout) view.findViewById(R.id.aimControllerLayout);
 
-        ControllerView controllerView = new ControllerView(getActivity());
+        AimControllerView controllerView = new AimControllerView(getActivity());
         controllerLayout.addView(controllerView);
 
         return view;

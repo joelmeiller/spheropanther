@@ -4,21 +4,22 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    tools:context="layout.AimFragment">
+    tools:context="layout.SensorFragment">
 
     <TextView
-        android:id="@+id/aimTitle"
+        android:id="@+id/sensorTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/aim_fragment_title"
+        android:background="@color/colorPrimary"
+        android:text="@string/sensor_fragment_title"
         android:textAlignment="center"
         android:textColor="@color/colorAccent"
         android:textSize="30sp"
         android:textStyle="bold" />
 
     <RelativeLayout
-        android:id="@+id/aimControllerLayout"
+        android:id="@+id/sensorControllerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/control_margin">

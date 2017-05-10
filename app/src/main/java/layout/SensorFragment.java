@@ -14,16 +14,16 @@ import ch.fhnw.edu.emoba.spheropantherapp.R;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link TouchFragment.OnFragmentInteractionListener} interface
+ * {@link SensorFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link TouchFragment#newInstance} factory method to
+ * Use the {@link SensorFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TouchFragment extends Fragment {
+public class SensorFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public TouchFragment() {
+    public SensorFragment() {
         // Required empty public constructor
     }
 
@@ -31,10 +31,10 @@ public class TouchFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @return A new instance of fragment TouchFragment.
+     * @return A new instance of fragment AimFragment.
      */
-    public static TouchFragment newInstance() {
-        TouchFragment fragment = new TouchFragment();
+    public static SensorFragment newInstance() {
+        SensorFragment fragment = new SensorFragment();
 
         return fragment;
     }
@@ -48,11 +48,11 @@ public class TouchFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_touch, container, false);
+        View view = inflater.inflate(R.layout.fragment_sensor, container, false);
 
-        RelativeLayout controllerLayout = (RelativeLayout) view.findViewById(R.id.touchControllerLayout);
+        RelativeLayout controllerLayout = (RelativeLayout) view.findViewById(R.id.sensorControllerLayout);
 
-        TouchControllerView controllerView = new TouchControllerView(getActivity());
+        SensorControllerView controllerView = new SensorControllerView(getActivity());
         controllerLayout.addView(controllerView);
 
         return view;

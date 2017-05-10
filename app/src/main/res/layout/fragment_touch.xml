@@ -1,14 +1,16 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
     tools:context="layout.TouchFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/touchTitle"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:background="@color/colorPrimary"
         android:text="@string/touch_fragment_title"
         android:textAlignment="center"
@@ -16,4 +18,12 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
-</FrameLayout>
+    <RelativeLayout
+        android:id="@+id/touchControllerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/control_margin">
+
+    </RelativeLayout>
+
+</LinearLayout>

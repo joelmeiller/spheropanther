@@ -3,14 +3,14 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="touch_fragment_title">Touch Control</string>
-    <string name="aim_fragment_title">Aim Control</string>
     <string name="pairing_fragment_title">Pairing Bluetooth</string>
     <string name="retry">Retry</string>
     <string name="quit">Quit</string>
 
     <string name="connectionFailedTitle" type="id">Could not connect</string>
     <string name="connectionFailedText" type="id">Spheropanther could not connect to your BlueTooth service. Please make sure you have to BlueTooth turned on and try again.</string>
+
+    <string name="touch_fragment_title">Touch Control</string>
+    <string name="aim_fragment_title">Aim Control</string>
+    <string name="sensor_fragment_title">Sensor Control</string>
 </resources>
