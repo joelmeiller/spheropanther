@@ -18,6 +18,16 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/sensorButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorLine"
+        android:text="Start Spheropanther" />
+
     <RelativeLayout
         android:id="@+id/sensorControllerLayout"
         android:layout_width="match_parent"

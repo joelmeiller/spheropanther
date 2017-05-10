@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import ch.fhnw.edu.emoba.spheropantherapp.R;
@@ -22,6 +23,7 @@ import ch.fhnw.edu.emoba.spheropantherapp.R;
 public class SensorFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private Boolean start = true;
 
     public SensorFragment() {
         // Required empty public constructor
@@ -52,16 +54,26 @@ public class SensorFragment extends Fragment {
 
         RelativeLayout controllerLayout = (RelativeLayout) view.findViewById(R.id.sensorControllerLayout);
 
-        SensorControllerView controllerView = new SensorControllerView(getActivity());
+        final SensorControllerView controllerView = new SensorControllerView(getActivity());
         controllerLayout.addView(controllerView);
 
-        return view;
-    }
+        // Add action listener
+        final Button button = (Button) view.findViewById(R.id.sensorButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (start) {
+                    controllerView.start();
+                    button.setText("Stop Spheropanther");
+                } else {
+                    controllerView.stop();
+                    button.setText("Start Spheropanther");
+                }
+                start = !start;
+            }
+        });
 
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
+        return view;
     }
 
     @Override

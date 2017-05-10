@@ -48,9 +48,10 @@ public class PairingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_pairing, container, false);
 
-        // Inflate the layout for this fragment
+        // Add action listener
         Button button = (Button) rootView.findViewById(R.id.startButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
