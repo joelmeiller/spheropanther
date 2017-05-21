@@ -184,12 +184,24 @@ public class SensorControllerView extends View {
         }
     }
 
+    @Override
+    protected void onSizeChanged(int width, int height, int oldw, int oldh) {
+        super.onSizeChanged(width, height, oldw, oldh);
+
+        Log.i(TAG, "initializing controller grid with widht = " + width + " & height = " + height);
+
+        if (width > 0 && height > 0) {
+            grid = new ControllerGrid(getContext(), width, height);
+        }
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        grid.drawGrid(canvas, nextPosition);
+        if (grid != null) {
+            grid.drawGrid(canvas, nextPosition);
+        }
     }
 
     @Override
