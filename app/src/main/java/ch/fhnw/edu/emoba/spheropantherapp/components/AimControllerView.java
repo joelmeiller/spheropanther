@@ -3,9 +3,15 @@ package ch.fhnw.edu.emoba.spheropantherapp.components;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Point;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+
+import ch.fhnw.edu.emoba.spheropantherapp.robot.RobotAimControlThread;
+
 
 /**
  * Created by Joel on 09/05/17.
@@ -19,18 +25,33 @@ public class AimControllerView extends View {
     private AimGrid grid;
     private Point nextPosition;
 
+    private RobotAimControlThread robotControlThread;
+    private Handler robotControlHandler;
+
     public AimControllerView(Context context) {
         super(context);
+    }
+
+    public void stopRobotControlThread() {
+        if (robotControlThread != null) {
+            robotControlThread.quit();
+            robotControlThread = null;
+            Log.i(TAG, "Stopped Robot Control Thread");
+        }
     }
 
     @Override
     protected void onSizeChanged(int width, int height, int oldw, int oldh) {
         super.onSizeChanged(width, height, oldw, oldh);
 
-        Log.i(TAG, "initializing aim grid with widht = " + width + " & height = " + height);
+        Log.i(TAG, "Initializing robot control with width = " + width + " & height = " + height);
 
         if (width > 0 && height > 0) {
             grid = new AimGrid(getContext(), width, height);
+
+            robotControlThread = new RobotAimControlThread("Robot Control", grid);
+            robotControlThread.start();
+            Log.i(TAG, "Started Robot Control Thread");
         }
     }
 
@@ -44,9 +65,11 @@ public class AimControllerView extends View {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 nextPosition = new Point(x, y);
+                moveRobot(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
                 nextPosition.set(x, y);
+                moveRobot(x, y);
                 break;
             default:
                 nextPosition = null;
@@ -66,4 +89,22 @@ public class AimControllerView extends View {
         }
     }
 
+    private void moveRobot(int x, int y) {
+        if (robotControlHandler == null) {
+            robotControlHandler = robotControlThread.getRobotControlThreadHandler();
+        }
+
+        if (robotControlHandler != null) {
+            Message msg = robotControlHandler.obtainMessage();
+            msg.what = RobotAimControlThread.POSITION_CHANGED;
+
+            Bundle content = new Bundle();
+            content.putInt(RobotAimControlThread.POS_X, x);
+            content.putInt(RobotAimControlThread.POS_Y, y);
+
+            msg.setData(content);
+
+            robotControlHandler.dispatchMessage(msg);
+        }
+    }
 }

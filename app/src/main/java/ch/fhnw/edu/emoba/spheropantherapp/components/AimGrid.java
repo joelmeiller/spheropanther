@@ -79,7 +79,6 @@ public class AimGrid {
             // Redraw touch position only if close to arc
             if (inXRange && inYRange && inRadius) {
 
-                Log.d(TAG, "Radius: " + radiusGrid + " / " + radiusTouch);
                 // Calculate angle
                 Double yCircle = yC - Math.sqrt(Math.pow(radiusGrid, 2) - Math.pow(dX, 2));
 

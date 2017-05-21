@@ -18,8 +18,7 @@ import ch.fhnw.edu.emoba.spheropantherapp.layout.MainViewPager;
 import ch.fhnw.edu.emoba.spheropantherapp.layout.SensorFragment;
 import ch.fhnw.edu.emoba.spheropantherapp.layout.TouchFragment;
 
-public class MainActivity extends AppCompatActivity
-        implements AimFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
 
     private static String TAG = MainActivity.class.toString();
 
@@ -76,11 +75,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        Log.d(TAG, uri.toString());
     }
 
     /**
