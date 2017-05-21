@@ -2,64 +2,44 @@ package ch.fhnw.edu.emoba.spheropantherapp;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.BoringLayout;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import layout.PairingFragment;
+import ch.fhnw.edu.emoba.spherolib.SpheroRobotDiscoveryListener;
+import ch.fhnw.edu.emoba.spherolib.SpheroRobotFactory;
+import ch.fhnw.edu.emoba.spherolib.SpheroRobotProxy;
 
 public class PairingActivity extends AppCompatActivity
-    implements PairingFragment.OnFragmentInteractionListener {
+    implements SpheroRobotDiscoveryListener {
 
     private static String TAG = PairingActivity.class.toString();
 
-    private Boolean showStart = false;
-    private BlueToothConnectThread connectionThread;
+    private SpheroRobotProxy proxy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pairing);
-
-        Button startButton = (Button) findViewById(R.id.startButton);
-        startButton.setVisibility(View.INVISIBLE);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        connectionThread = new BlueToothConnectThread();
-        connectionThread.execute();
+
+        Boolean onEmulator = Build.PRODUCT.startsWith("sdk");
+        proxy = SpheroRobotFactory.createRobot(onEmulator);
+        proxy.setDiscoveryListener(this);
+        proxy.startDiscovering(getApplicationContext());
     }
 
-    private void handleBlueToothConnection(Boolean connected) {
-        Log.i(TAG, "BlueTooth Connected: " + connected);
-
-        if (connected) {
-            Button startButton = (Button) findViewById(R.id.startButton);
-            startButton.setVisibility(View.VISIBLE);
-
-            ProgressBar connectionProgress = (ProgressBar) findViewById(R.id.connectionProgress);
-            connectionProgress.setVisibility(View.INVISIBLE);
-
-            TextView connectionText = (TextView) findViewById(R.id.connectionText);
-            connectionText.setText("Successfully Connected");
-        } else {
-            AlertDialog dialog = connectionFailedDialog();
-            dialog.show();
-        }
-    }
-
-    private AlertDialog connectionFailedDialog() {
+    private void connectionFailedDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle(R.string.connectionFailedTitle);
@@ -68,8 +48,7 @@ public class PairingActivity extends AppCompatActivity
         // Add the buttons
         builder.setPositiveButton(R.string.retry, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                connectionThread = new BlueToothConnectThread();
-                connectionThread.execute();
+                proxy.startDiscovering(getApplicationContext());
             }
         });
         builder.setNegativeButton(R.string.quit, new DialogInterface.OnClickListener() {
@@ -79,39 +58,36 @@ public class PairingActivity extends AppCompatActivity
         });
 
         // Create the AlertDialog
-        return builder.create();
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
-    public void onStartListener() {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
-        ActivityCompat.finishAffinity(this);
-    }
+    public void handleRobotChangedState(SpheroRobotBluetoothNotification type) {
+        Log.i(TAG, type.toString());
+        proxy.stopDiscovering();
 
-    class BlueToothConnectThread extends AsyncTask<Void, Void, Boolean> {
+        if (type == SpheroRobotBluetoothNotification.Online) {
 
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            Boolean connected = false;
-            Log.i(TAG, "Start Pairing BlueTooth...");
+            Log.i(TAG, "BlueTooth Connected. Starting Sheropanther...");
 
-            try {
-                // TODO: Connect BlueThooth
-                Thread.sleep(1000);
-                connected = true;
-            } catch (InterruptedException e) {
-                throw new RuntimeException("Could not connect to BlueTooth");
-            }
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
 
-            return connected;
-        }
+            ActivityCompat.finishAffinity(this);
 
-        @Override
-        protected void onPostExecute(Boolean connected) {
-            super.onPostExecute(connected);
-            handleBlueToothConnection(connected);
+        } else {
+
+            Log.e(TAG, "Connection failed.");
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    connectionFailedDialog();
+                }
+            });
+
         }
     }
 }
