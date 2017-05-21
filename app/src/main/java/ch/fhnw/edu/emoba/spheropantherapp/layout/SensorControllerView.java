@@ -1,4 +1,4 @@
-package layout;
+package ch.fhnw.edu.emoba.spheropantherapp.layout;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,7 +8,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 import java.util.concurrent.Executors;

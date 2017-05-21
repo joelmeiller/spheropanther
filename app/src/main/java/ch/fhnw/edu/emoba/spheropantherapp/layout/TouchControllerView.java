@@ -1,4 +1,4 @@
-package layout;
+package ch.fhnw.edu.emoba.spheropantherapp.layout;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,10 +9,8 @@ import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
-import ch.fhnw.edu.emoba.spheropantherapp.R;
+import ch.fhnw.edu.emoba.spheropantherapp.robot.RobotTouchControlThread;
 
 /**
  * Created by Joel on 09/05/17.
@@ -26,7 +24,7 @@ public class TouchControllerView extends View {
     private ControllerGrid grid;
     private Point nextPosition;
 
-    private RobotControlThread robotControlThread;
+    private RobotTouchControlThread robotControlThread;
     private Handler robotControlHandler;
 
     public TouchControllerView(Context context) {
@@ -37,7 +35,7 @@ public class TouchControllerView extends View {
         if (robotControlThread != null) {
             robotControlThread.quit();
             robotControlThread = null;
-            Log.d(TAG, "Stopped Robot Control Thread");
+            Log.i(TAG, "Stopped Robot Control Thread");
         }
     }
 
@@ -50,7 +48,7 @@ public class TouchControllerView extends View {
         if (width > 0 && height > 0) {
             grid = new ControllerGrid(getContext(), width, height);
 
-            robotControlThread = new RobotControlThread("Robot Control", grid.getCenterX(), grid.getCenterY());
+            robotControlThread = new RobotTouchControlThread("Robot Control", grid);
             robotControlThread.start();
             Log.i(TAG, "Started Robot Control Thread");
         }
@@ -97,11 +95,11 @@ public class TouchControllerView extends View {
 
         if (robotControlHandler != null) {
             Message msg = robotControlHandler.obtainMessage();
-            msg.what = RobotControlThread.POSITION_CHANGED;
+            msg.what = RobotTouchControlThread.POSITION_CHANGED;
 
             Bundle content = new Bundle();
-            content.putInt(RobotControlThread.POS_X, x);
-            content.putInt(RobotControlThread.POS_Y, y);
+            content.putInt(RobotTouchControlThread.POS_X, x);
+            content.putInt(RobotTouchControlThread.POS_Y, y);
 
             msg.setData(content);
 

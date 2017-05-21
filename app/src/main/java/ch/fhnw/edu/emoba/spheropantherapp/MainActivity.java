@@ -1,11 +1,8 @@
 package ch.fhnw.edu.emoba.spheropantherapp;
 
 import android.net.Uri;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,11 +12,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import layout.AimFragment;
-import layout.SensorFragment;
-import layout.TouchFragment;
+import ch.fhnw.edu.emoba.spheropantherapp.layout.AimFragment;
+import ch.fhnw.edu.emoba.spheropantherapp.layout.MainViewPager;
+import ch.fhnw.edu.emoba.spheropantherapp.layout.SensorFragment;
+import ch.fhnw.edu.emoba.spheropantherapp.layout.TouchFragment;
 
 public class MainActivity extends AppCompatActivity
         implements AimFragment.OnFragmentInteractionListener {
@@ -39,7 +36,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    private MainViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +48,7 @@ public class MainActivity extends AppCompatActivity
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (MainViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);

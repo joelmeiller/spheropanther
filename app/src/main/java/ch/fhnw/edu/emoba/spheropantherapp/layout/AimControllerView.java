@@ -1,4 +1,4 @@
-package layout;
+package ch.fhnw.edu.emoba.spheropantherapp.layout;
 
 import android.content.Context;
 import android.graphics.Canvas;

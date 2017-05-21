@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    tools:context="layout.SensorFragment">
+    tools:context=".layout.SensorFragment">
 
     <TextView
         android:id="@+id/sensorTitle"

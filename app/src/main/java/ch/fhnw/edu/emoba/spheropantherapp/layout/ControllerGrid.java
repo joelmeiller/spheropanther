@@ -1,11 +1,10 @@
-package layout;
+package ch.fhnw.edu.emoba.spheropantherapp.layout;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.support.v4.content.ContextCompat;
-import android.widget.RelativeLayout;
 
 import ch.fhnw.edu.emoba.spheropantherapp.R;
 
@@ -31,6 +30,7 @@ public class ControllerGrid {
 
     public int getCenterX() { return xC; };
     public int getCenterY() { return yC; };
+    public int getRadius() { return radiusGrid; };
 
 
     public ControllerGrid(Context context) {
@@ -47,7 +47,7 @@ public class ControllerGrid {
 
         radiusGrid = measureSize / 3;
         marginGrid = (height - (2 * radiusGrid)) / 3;
-        radiusTouch = measureSize / 15;
+        radiusTouch = measureSize / 18;
 
         xC = (int) width / 2;
         yC = radiusGrid + marginGrid;
