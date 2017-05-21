@@ -1,4 +1,4 @@
-package ch.fhnw.edu.emoba.spheropantherapp.layout;
+package ch.fhnw.edu.emoba.spheropantherapp.components;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -47,7 +47,7 @@ public class ControllerGrid {
 
         radiusGrid = measureSize / 3;
         marginGrid = (height - (2 * radiusGrid)) / 3;
-        radiusTouch = measureSize / 18;
+        radiusTouch = measureSize / 20;
 
         xC = (int) width / 2;
         yC = radiusGrid + marginGrid;

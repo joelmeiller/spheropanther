@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import ch.fhnw.edu.emoba.spheropantherapp.R;
+import ch.fhnw.edu.emoba.spheropantherapp.components.SensorControllerView;
 
 /**
  * A simple {@link Fragment} subclass.

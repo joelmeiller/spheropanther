@@ -4,11 +4,10 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
-import android.util.Log;
 
 import ch.fhnw.edu.emoba.spherolib.SpheroRobotFactory;
 import ch.fhnw.edu.emoba.spherolib.SpheroRobotProxy;
-import ch.fhnw.edu.emoba.spheropantherapp.layout.ControllerGrid;
+import ch.fhnw.edu.emoba.spheropantherapp.components.ControllerGrid;
 
 /**
  * Created by Joel on 21/05/17.
@@ -61,15 +60,15 @@ public class RobotTouchControlThread extends HandlerThread {
         double direction = 0f;
 
         // Calculate velocity
-        Integer dX = new Integer(grid.getCenterX() - x);
-        Integer dY = new Integer(grid.getCenterY() - y);
+        Double dX = new Double(grid.getCenterX() - x);
+        Double dY = new Double(grid.getCenterY() - y);
 
-        double radius = Math.sqrt(Math.pow(dX.doubleValue(), 2) + Math.pow(dY.doubleValue(), 2));
+        double radius = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
         velocity = (radius > grid.getRadius() ? grid.getRadius() : radius) / grid.getRadius();
 
         // Calculate direction
         // Value between 0 and + 360 degrees (clockwise)
-        direction = Math.acos(dY.doubleValue() / radius);
+        direction = Math.acos(dY / radius);
         direction = dX > 0 ? FULL_CIRCLE - direction : direction;
         int directionDegree = (int) Math.round(direction / Math.PI * 180);
 

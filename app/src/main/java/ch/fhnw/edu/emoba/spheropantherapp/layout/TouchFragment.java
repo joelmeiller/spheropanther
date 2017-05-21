@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import ch.fhnw.edu.emoba.spheropantherapp.R;
+import ch.fhnw.edu.emoba.spheropantherapp.components.TouchControllerView;
 
 /**
  * A simple {@link Fragment} subclass.

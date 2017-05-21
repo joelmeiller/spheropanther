@@ -1,4 +1,4 @@
-package ch.fhnw.edu.emoba.spheropantherapp.layout;
+package ch.fhnw.edu.emoba.spheropantherapp.components;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -16,7 +16,7 @@ public class AimControllerView extends View {
     private static String TAG = AimControllerView.class.toString();
 
 
-    private ControllerGrid grid;
+    private AimGrid grid;
     private Point nextPosition;
 
     public AimControllerView(Context context) {
@@ -27,10 +27,10 @@ public class AimControllerView extends View {
     protected void onSizeChanged(int width, int height, int oldw, int oldh) {
         super.onSizeChanged(width, height, oldw, oldh);
 
-        Log.i(TAG, "initializing controller grid with widht = " + width + " & height = " + height);
+        Log.i(TAG, "initializing aim grid with widht = " + width + " & height = " + height);
 
         if (width > 0 && height > 0) {
-            grid = new ControllerGrid(getContext(), width, height);
+            grid = new AimGrid(getContext(), width, height);
         }
     }
 
