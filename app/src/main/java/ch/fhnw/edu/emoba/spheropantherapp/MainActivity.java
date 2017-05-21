@@ -22,7 +22,7 @@ import layout.SensorFragment;
 import layout.TouchFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements AimFragment.OnFragmentInteractionListener, TouchFragment.OnFragmentInteractionListener {
+        implements AimFragment.OnFragmentInteractionListener {
 
     private static String TAG = MainActivity.class.toString();
 

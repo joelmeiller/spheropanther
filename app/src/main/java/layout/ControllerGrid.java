@@ -26,6 +26,13 @@ public class ControllerGrid {
     private Paint paint;
     private Point lastPosition;
 
+    private int xC = 0;
+    private int yC = 0;
+
+    public int getCenterX() { return xC; };
+    public int getCenterY() { return yC; };
+
+
     public ControllerGrid(Context context) {
         this.context = context;
 
@@ -41,16 +48,16 @@ public class ControllerGrid {
         radiusGrid = measureSize / 3;
         marginGrid = (height - (2 * radiusGrid)) / 3;
         radiusTouch = measureSize / 15;
+
+        xC = (int) width / 2;
+        yC = radiusGrid + marginGrid;
     }
 
 
     protected void drawGrid(Canvas canvas, Point nextPosition) {
 
-        int xC = (int) canvas.getWidth() / 2;
-        int yC = radiusGrid + marginGrid;
-
         // Draw controll cross
-        drawControllCross(canvas, xC, yC);
+        drawControllCross(canvas);
 
 
         // Draw position circle
@@ -84,7 +91,7 @@ public class ControllerGrid {
         }
     }
 
-    private void drawControllCross(Canvas canvas, int xC, int yC) {
+    private void drawControllCross(Canvas canvas) {
         // Draw Lines
         // *************
         int color = ContextCompat.getColor(context, R.color.colorLine);
