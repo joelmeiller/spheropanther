@@ -19,7 +19,7 @@ import ch.fhnw.edu.emoba.spheropantherapp.components.AimControllerView;
  * Use the {@link AimFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AimFragment extends Fragment implements RobotFragment {
+public class AimFragment extends Fragment {
 
     private AimControllerView controllerView;
 
@@ -66,11 +66,15 @@ public class AimFragment extends Fragment implements RobotFragment {
         return view;
     }
 
-    public void start() {
+    @Override
+    public void onResume() {
+        super.onResume();
         controllerView.startRobotControlThread();
     }
 
-    public void stop() {
+    @Override
+    public void onPause() {
+        super.onPause();
         controllerView.stopRobotControlThread();
     }
 }

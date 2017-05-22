@@ -31,7 +31,6 @@ public class AimGrid {
     private int yC = 0;
 
     public int getCenterX() { return xC; };
-    public int getCenterY() { return yC; };
     public int getRadius() { return radiusGrid; };
 
 
@@ -67,21 +66,16 @@ public class AimGrid {
 
         if (nextPosition != null) {
 
-            // Calculate velocity
+            // Calculate touchable range
             Double dX = new Double(xC - nextPosition.x);
-            Double dY = new Double(yC - nextPosition.y);
-
-            double radius = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
-            boolean inRadius = Math.abs(radiusGrid - radius) < radiusTouch;
             boolean inXRange = nextPosition.x >= (xC - radiusGrid) && nextPosition.x <= (xC + radiusGrid);
             boolean inYRange = nextPosition.y <= yC;
 
-            // Redraw touch position only if close to arc
-            if (inXRange && inYRange && inRadius) {
+            // Redraw touch position only if in range
+            if (inXRange && inYRange) {
 
                 // Calculate angle
                 Double yCircle = xC - Math.sqrt(Math.pow(radiusGrid, 2) - Math.pow(dX, 2));
-
 
                 paint.setStyle(Paint.Style.FILL);
                 canvas.drawCircle(nextPosition.x, yCircle.intValue(), radiusTouch, paint);
@@ -120,7 +114,6 @@ public class AimGrid {
         int yStart = yC;
         int xEnd = xC + radiusGrid;
         int yEnd = yC;
-        // canvas.drawLine(xStart, yStart, xEnd, yEnd, paint);
 
         // Draw Half Circle
         // *************
