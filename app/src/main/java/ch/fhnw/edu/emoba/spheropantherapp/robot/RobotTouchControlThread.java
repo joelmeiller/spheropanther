@@ -1,6 +1,5 @@
 package ch.fhnw.edu.emoba.spheropantherapp.robot;
 
-import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
@@ -29,13 +28,14 @@ public class RobotTouchControlThread extends HandlerThread {
 
     private ControllerGrid grid;
 
-    public RobotTouchControlThread(String name, ControllerGrid grid ) {
+    public RobotTouchControlThread(String name) {
         super(name);
 
-        this.grid = grid;
+        proxy = SpheroRobotFactory.getActualRobotProxy();
+    }
 
-        Boolean onEmulator = Build.PRODUCT.startsWith("sdk");
-        proxy = SpheroRobotFactory.createRobot(onEmulator);
+    public void setGrid(ControllerGrid grid) {
+        this.grid = grid;
     }
 
     @Override
@@ -56,23 +56,25 @@ public class RobotTouchControlThread extends HandlerThread {
     }
 
     private void moveRobot(int x, int y) {
-        double velocity = 0f;
-        double direction = 0f;
+        if (grid != null) {
+            double velocity = 0f;
+            double direction = 0f;
 
-        // Calculate velocity
-        Double dX = new Double(grid.getCenterX() - x);
-        Double dY = new Double(grid.getCenterY() - y);
+            // Calculate velocity
+            Double dX = new Double(grid.getCenterX() - x);
+            Double dY = new Double(grid.getCenterY() - y);
 
-        double radius = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
-        velocity = (radius > grid.getRadius() ? grid.getRadius() : radius) / grid.getRadius();
+            double radius = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+            velocity = (radius > grid.getRadius() ? grid.getRadius() : radius) / grid.getRadius();
 
-        // Calculate direction
-        // Value between 0 and + 360 degrees (clockwise)
-        direction = Math.acos(dY / radius);
-        direction = dX > 0 ? FULL_CIRCLE - direction : direction;
-        int directionDegree = (int) Math.round(direction / Math.PI * 180);
+            // Calculate direction
+            // Value between 0 and + 360 degrees (clockwise)
+            direction = Math.acos(dY / radius);
+            direction = dX > 0 ? FULL_CIRCLE - direction : direction;
+            int directionDegree = (int) Math.round(direction / Math.PI * 180);
 
-        proxy.drive(directionDegree, (float) velocity);
+            proxy.drive(directionDegree, (float) velocity);
+        }
     }
 
     public Handler getRobotControlThreadHandler() {

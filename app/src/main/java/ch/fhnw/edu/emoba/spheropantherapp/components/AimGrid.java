@@ -80,7 +80,7 @@ public class AimGrid {
             if (inXRange && inYRange && inRadius) {
 
                 // Calculate angle
-                Double yCircle = yC - Math.sqrt(Math.pow(radiusGrid, 2) - Math.pow(dX, 2));
+                Double yCircle = xC - Math.sqrt(Math.pow(radiusGrid, 2) - Math.pow(dX, 2));
 
 
                 paint.setStyle(Paint.Style.FILL);

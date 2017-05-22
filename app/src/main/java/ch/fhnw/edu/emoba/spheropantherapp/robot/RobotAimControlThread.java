@@ -41,8 +41,12 @@ public class RobotAimControlThread extends HandlerThread {
         this.grid = grid;
         this.direction = 0.f;
 
-        Boolean onEmulator = Build.PRODUCT.startsWith("sdk");
-        proxy = SpheroRobotFactory.createRobot(onEmulator);
+        proxy = SpheroRobotFactory.getActualRobotProxy();
+        proxy.setBackLedBrightness(1.f);
+    }
+
+    public void setGrid(AimGrid grid) {
+        this.grid = grid;
     }
 
     @Override
@@ -62,22 +66,36 @@ public class RobotAimControlThread extends HandlerThread {
         };
     }
 
+
     private void moveRobot(int x, int y) {
-        double directionDelta = 0.0;
+        if (grid != null) {
+            double directionDelta = 0.0;
 
 
-        // Calculate direction change
-        Double dX = new Double(x - grid.getCenterX());
+            // Calculate direction change
+            Double dX = new Double(x - grid.getCenterX());
 
-        // Value between - and + 90 degrees (clockwise)
-        directionDelta = Math.asin(dX / grid.getRadius()) * SPEED;
-        direction += (float) Math.round(directionDelta / Math.PI * 180);
-        direction = (direction % 360 + 360) % 360;
+            // Value between - and + 90 degrees (clockwise)
+            directionDelta = Math.asin(dX / grid.getRadius()) * SPEED;
+            direction += (float) Math.round(directionDelta / Math.PI * 180);
+            direction = (direction % 360 + 360) % 360;
 
-        proxy.drive(direction, 0.f);
+            proxy.drive(direction, 0.f);
+        }
+    }
+
+    public void setZeroHeading() {
+        Log.d(TAG, "Set Zero Heading: " + direction);
+        proxy.setZeroHeading();
+    }
+
+    public void stopRobot() {
+        Log.i(TAG, "Stop aiming robot");
+        proxy.setBackLedBrightness(0.f);
     }
 
     public Handler getRobotControlThreadHandler() {
         return robotControlHandler;
     }
+
 }

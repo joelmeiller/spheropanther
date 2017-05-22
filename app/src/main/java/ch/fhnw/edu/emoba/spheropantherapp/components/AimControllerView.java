@@ -9,7 +9,9 @@ import android.os.Message;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 
+import ch.fhnw.edu.emoba.spheropantherapp.R;
 import ch.fhnw.edu.emoba.spheropantherapp.robot.RobotAimControlThread;
 
 
@@ -30,14 +32,23 @@ public class AimControllerView extends View {
 
     public AimControllerView(Context context) {
         super(context);
+
+        robotControlThread = new RobotAimControlThread("Robot Control", grid);
+    }
+
+    public void setZeroHeading() {
+        robotControlThread.setZeroHeading();
+    }
+
+    public void startRobotControlThread() {
+        robotControlThread.start();
+        Log.i(TAG, "Started Robot Control Thread");
     }
 
     public void stopRobotControlThread() {
-        if (robotControlThread != null) {
-            robotControlThread.quit();
-            robotControlThread = null;
-            Log.i(TAG, "Stopped Robot Control Thread");
-        }
+        robotControlThread.stopRobot();
+        robotControlThread.quit();
+        Log.i(TAG, "Stopped Robot Control Thread");
     }
 
     @Override
@@ -48,10 +59,7 @@ public class AimControllerView extends View {
 
         if (width > 0 && height > 0) {
             grid = new AimGrid(getContext(), width, height);
-
-            robotControlThread = new RobotAimControlThread("Robot Control", grid);
-            robotControlThread.start();
-            Log.i(TAG, "Started Robot Control Thread");
+            robotControlThread.setGrid(grid);
         }
     }
 

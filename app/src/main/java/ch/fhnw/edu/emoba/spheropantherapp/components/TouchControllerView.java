@@ -29,14 +29,19 @@ public class TouchControllerView extends View {
 
     public TouchControllerView(Context context) {
         super(context);
+
+        robotControlThread = new RobotTouchControlThread("Robot Control");
+    }
+
+
+    public void startRobotControlThread() {
+        robotControlThread.start();
+        Log.i(TAG, "Started Robot Control Thread");
     }
 
     public void stopRobotControlThread() {
-        if (robotControlThread != null) {
-            robotControlThread.quit();
-            robotControlThread = null;
-            Log.i(TAG, "Stopped Robot Control Thread");
-        }
+        robotControlThread.quit();
+        Log.i(TAG, "Stopped Robot Control Thread");
     }
 
     @Override
@@ -47,10 +52,7 @@ public class TouchControllerView extends View {
 
         if (width > 0 && height > 0) {
             grid = new ControllerGrid(getContext(), width, height);
-
-            robotControlThread = new RobotTouchControlThread("Robot Control", grid);
-            robotControlThread.start();
-            Log.i(TAG, "Started Robot Control Thread");
+            robotControlThread.setGrid(grid);
         }
     }
 

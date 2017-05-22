@@ -17,7 +17,7 @@ import ch.fhnw.edu.emoba.spheropantherapp.components.TouchControllerView;
  * Use the {@link TouchFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TouchFragment extends Fragment {
+public class TouchFragment extends Fragment implements RobotFragment {
 
     private TouchControllerView controllerView;
 
@@ -56,10 +56,11 @@ public class TouchFragment extends Fragment {
         return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
+    public void start() {
+        controllerView.startRobotControlThread();
+    }
 
+    public void stop() {
         controllerView.stopRobotControlThread();
     }
 }
