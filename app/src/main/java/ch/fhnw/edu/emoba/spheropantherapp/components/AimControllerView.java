@@ -111,8 +111,7 @@ public class AimControllerView extends View {
             content.putInt(RobotAimControlThread.POS_Y, y);
 
             msg.setData(content);
-
-            robotControlHandler.dispatchMessage(msg);
+            msg.sendToTarget();
         }
     }
 }

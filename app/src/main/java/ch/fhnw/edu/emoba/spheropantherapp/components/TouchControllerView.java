@@ -104,8 +104,7 @@ public class TouchControllerView extends View {
             content.putInt(RobotTouchControlThread.POS_Y, y);
 
             msg.setData(content);
-
-            robotControlHandler.dispatchMessage(msg);
+            msg.sendToTarget();
         }
     }
 }

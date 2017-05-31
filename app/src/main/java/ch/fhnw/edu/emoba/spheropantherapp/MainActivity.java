@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import ch.fhnw.edu.emoba.spherolib.SpheroRobotFactory;
+import ch.fhnw.edu.emoba.spherolib.SpheroRobotProxy;
 import ch.fhnw.edu.emoba.spheropantherapp.layout.AimFragment;
 import ch.fhnw.edu.emoba.spheropantherapp.layout.MainViewPager;
 import ch.fhnw.edu.emoba.spheropantherapp.layout.SensorFragment;
@@ -60,6 +62,14 @@ public class MainActivity extends AppCompatActivity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        SpheroRobotProxy proxy = SpheroRobotFactory.getActualRobotProxy();
+        proxy.disconnect();
     }
 
     @Override
