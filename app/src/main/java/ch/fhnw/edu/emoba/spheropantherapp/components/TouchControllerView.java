@@ -69,8 +69,10 @@ public class TouchControllerView extends View {
                 moveRobot(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
-                nextPosition.set(x, y);
-                moveRobot(x, y);
+                if (nextPosition != null) {
+                    nextPosition.set(x, y);
+                    moveRobot(x, y);
+                }
                 break;
             default:
                 nextPosition = null;
