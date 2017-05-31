@@ -34,6 +34,7 @@ public class AimControllerView extends View {
         super(context);
 
         robotControlThread = new RobotAimControlThread("Robot Control", grid);
+        nextPosition = new Point(0, 0);
     }
 
     public void setZeroHeading() {
@@ -72,17 +73,17 @@ public class AimControllerView extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                nextPosition = new Point(x, y);
+                nextPosition.set(x, y);
                 moveRobot(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (nextPosition != null) {
-                    nextPosition.set(x, y);
-                    moveRobot(x, y);
-                }
+                nextPosition.set(x, y);
+                moveRobot(x, y);
                 break;
+            case MotionEvent.ACTION_UP:
+                nextPosition.set(0, 0);
             default:
-                nextPosition = null;
+                // Do nothing
         }
 
         postInvalidate();

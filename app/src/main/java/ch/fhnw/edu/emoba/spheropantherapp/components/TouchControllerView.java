@@ -31,6 +31,7 @@ public class TouchControllerView extends View {
         super(context);
 
         robotControlThread = new RobotTouchControlThread("Robot Control");
+        nextPosition = new Point(0, 0);
     }
 
 
@@ -65,17 +66,18 @@ public class TouchControllerView extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                nextPosition = new Point(x, y);
+                nextPosition.set(x, y);
                 moveRobot(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (nextPosition != null) {
-                    nextPosition.set(x, y);
-                    moveRobot(x, y);
-                }
+                nextPosition.set(x, y);
+                moveRobot(x, y);
+                break;
+            case MotionEvent.ACTION_UP:
+                nextPosition.set(0, 0);
                 break;
             default:
-                nextPosition = null;
+                // Do nothing
         }
 
         postInvalidate();
