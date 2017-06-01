@@ -32,9 +32,6 @@ public class AimControllerView extends View {
 
     public AimControllerView(Context context) {
         super(context);
-
-        robotControlThread = new RobotAimControlThread("Robot Control", grid);
-        nextPosition = new Point(0, 0);
     }
 
     public void setZeroHeading() {
@@ -42,14 +39,20 @@ public class AimControllerView extends View {
     }
 
     public void startRobotControlThread() {
-        robotControlThread.start();
-        Log.i(TAG, "Started Robot Control Thread");
+        if (robotControlThread == null) {
+            robotControlThread = new RobotAimControlThread("Robot Control", grid);
+            robotControlThread.start();
+            Log.i(TAG, "Started Robot Control Thread");
+        }
     }
 
     public void stopRobotControlThread() {
-        robotControlThread.stopRobot();
-        robotControlThread.quit();
-        Log.i(TAG, "Stopped Robot Control Thread");
+        if (robotControlThread != null) {
+            robotControlThread.stopRobot();
+            robotControlThread.quit();
+            robotControlThread = null;
+            Log.i(TAG, "Stopped Robot Control Thread");
+        }
     }
 
     @Override
@@ -73,15 +76,18 @@ public class AimControllerView extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                nextPosition.set(x, y);
+                nextPosition = new Point(x, y);
                 moveRobot(x, y);
                 break;
             case MotionEvent.ACTION_MOVE:
-                nextPosition.set(x, y);
-                moveRobot(x, y);
+                if (nextPosition != null) {
+                    nextPosition.set(x, y);
+                    moveRobot(x, y);
+                }
                 break;
             case MotionEvent.ACTION_UP:
-                nextPosition.set(0, 0);
+                nextPosition = null;
+                moveRobot(0, 0);
             default:
                 // Do nothing
         }
@@ -101,7 +107,7 @@ public class AimControllerView extends View {
     }
 
     private void moveRobot(int x, int y) {
-        if (robotControlHandler == null) {
+        if (robotControlHandler == null && robotControlThread != null) {
             robotControlHandler = robotControlThread.getRobotControlThreadHandler();
         }
 

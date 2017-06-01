@@ -17,6 +17,7 @@ import ch.fhnw.edu.emoba.spherolib.SpheroRobotFactory;
 import ch.fhnw.edu.emoba.spherolib.SpheroRobotProxy;
 import ch.fhnw.edu.emoba.spheropantherapp.layout.AimFragment;
 import ch.fhnw.edu.emoba.spheropantherapp.layout.MainViewPager;
+import ch.fhnw.edu.emoba.spheropantherapp.layout.RobotControlFragment;
 import ch.fhnw.edu.emoba.spheropantherapp.layout.SensorFragment;
 import ch.fhnw.edu.emoba.spheropantherapp.layout.TouchFragment;
 
@@ -54,6 +55,26 @@ public class MainActivity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Log.d(TAG, "Select Fragment");
+                RobotControlFragment fragment = (RobotControlFragment) mSectionsPagerAdapter.getItem(tab.getPosition());
+                fragment.start();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                Log.d(TAG, "Unselect Fragment");
+                RobotControlFragment fragment = (RobotControlFragment) mSectionsPagerAdapter.getItem(tab.getPosition());
+                fragment.stop();
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                // Do nothing
+            }
+        });
     }
 
 
@@ -103,11 +124,11 @@ public class MainActivity extends AppCompatActivity {
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return (Fragment) AimFragment.newInstance();
+                    return (Fragment) AimFragment.instance();
                 case 1:
-                    return (Fragment) TouchFragment.newInstance();
+                    return (Fragment) TouchFragment.instance();
                 default:
-                    return (Fragment) SensorFragment.newInstance();
+                    return (Fragment) SensorFragment.instance();
             }
         }
 

@@ -18,7 +18,9 @@ import ch.fhnw.edu.emoba.spheropantherapp.components.SensorControllerView;
  * Use the {@link SensorFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SensorFragment extends Fragment {
+public class SensorFragment extends Fragment implements RobotControlFragment {
+
+    private static SensorFragment fragment;
 
     private Boolean start = true;
     private SensorControllerView controllerView;
@@ -33,9 +35,10 @@ public class SensorFragment extends Fragment {
      *
      * @return A new instance of fragment AimFragment.
      */
-    public static SensorFragment newInstance() {
-        SensorFragment fragment = new SensorFragment();
-
+    public static SensorFragment instance() {
+        if (fragment == null) {
+            fragment = new SensorFragment();
+        }
         return fragment;
     }
 
@@ -62,10 +65,10 @@ public class SensorFragment extends Fragment {
             @Override
             public void onClick(View v) {
             if (start) {
-                controllerView.start();
+                controllerView.startRobotControlThread();
                 button.setText("Stop Spheropanther");
             } else {
-                controllerView.stop();
+                controllerView.stopRobotControlThread();
                 button.setText("Start Spheropanther");
             }
             start = !start;
@@ -75,14 +78,12 @@ public class SensorFragment extends Fragment {
         return view;
     }
 
+    public void start() {
+        controllerView.startRobotControlThread();
+    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-
-        if (controllerView != null) {
-            controllerView.stop();
-            start = true;
-        }
+    public void stop() {
+        controllerView.stopRobotControlThread();
+        start = true;
     }
 }

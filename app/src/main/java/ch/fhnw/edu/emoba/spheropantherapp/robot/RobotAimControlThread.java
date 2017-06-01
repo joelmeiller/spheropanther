@@ -6,6 +6,12 @@ import android.os.HandlerThread;
 import android.os.Message;
 import android.util.Log;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import ch.fhnw.edu.emoba.spherolib.SpheroRobotFactory;
 import ch.fhnw.edu.emoba.spherolib.SpheroRobotProxy;
 import ch.fhnw.edu.emoba.spheropantherapp.components.AimGrid;
@@ -29,11 +35,17 @@ public class RobotAimControlThread extends HandlerThread {
 
     private float direction;
 
+    private ScheduledFuture workerTask;
     private Handler robotControlHandler;
+
 
     private SpheroRobotProxy proxy;
 
     private AimGrid grid;
+
+    private AtomicInteger x;
+    private AtomicInteger y;
+
 
     public RobotAimControlThread(String name, AimGrid grid ) {
         super(name);
@@ -43,6 +55,8 @@ public class RobotAimControlThread extends HandlerThread {
 
         proxy = SpheroRobotFactory.getActualRobotProxy();
         proxy.setBackLedBrightness(1.f);
+
+        x = new AtomicInteger(0);
     }
 
     public void setGrid(AimGrid grid) {
@@ -56,31 +70,36 @@ public class RobotAimControlThread extends HandlerThread {
         robotControlHandler = new Handler(getLooper()) {
             @Override
             public void handleMessage(Message msg) {
-                int x = msg.getData().getInt(POS_X);
-                int y = msg.getData().getInt(POS_Y);
 
                 if (msg.what == POSITION_CHANGED) {
-                    moveRobot(x, y);
+                    x.set(msg.getData().getInt(POS_X));
                 }
             }
         };
+
+        Thread thread = new RobotAimControlThread.RobotDriverThread();
+        ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+        // Run thread each 10 milisecons
+        workerTask = scheduler.scheduleAtFixedRate(thread, 0, 20, TimeUnit.MILLISECONDS);
     }
 
+    class RobotDriverThread extends Thread {
+        @Override
+        public void run() {
+            if (grid != null) {
+                double directionDelta = 0.0;
 
-    private void moveRobot(int x, int y) {
-        if (grid != null) {
-            double directionDelta = 0.0;
 
+                // Calculate direction change
+                Double dX = new Double(x.get() - grid.getCenterX());
 
-            // Calculate direction change
-            Double dX = new Double(x - grid.getCenterX());
+                // Value between - and + 90 degrees (clockwise)
+                directionDelta = Math.asin(dX / grid.getRadius()) * SPEED;
+                direction += (float) Math.round(directionDelta / Math.PI * 180);
+                direction = (direction % 360 + 360) % 360;
 
-            // Value between - and + 90 degrees (clockwise)
-            directionDelta = Math.asin(dX / grid.getRadius()) * SPEED;
-            direction += (float) Math.round(directionDelta / Math.PI * 180);
-            direction = (direction % 360 + 360) % 360;
-
-            proxy.drive(direction, 0.f);
+                proxy.drive(direction, 0.f);
+            }
         }
     }
 
@@ -91,6 +110,9 @@ public class RobotAimControlThread extends HandlerThread {
 
     public void stopRobot() {
         Log.i(TAG, "Stop aiming robot");
+        if (workerTask != null) {
+            workerTask.cancel(true);
+        }
         proxy.setBackLedBrightness(0.f);
     }
 

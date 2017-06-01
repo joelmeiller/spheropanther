@@ -3,6 +3,7 @@ package ch.fhnw.edu.emoba.spheropantherapp.layout;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,9 @@ import ch.fhnw.edu.emoba.spheropantherapp.components.AimControllerView;
  * Use the {@link AimFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AimFragment extends Fragment {
+public class AimFragment extends Fragment implements RobotControlFragment {
 
+    private static AimFragment fragment;
     private AimControllerView controllerView;
 
     public AimFragment() {
@@ -33,9 +35,10 @@ public class AimFragment extends Fragment {
      *
      * @return A new instance of fragment AimFragment.
      */
-    public static AimFragment newInstance() {
-        AimFragment fragment = new AimFragment();
-
+    public static AimFragment instance() {
+        if (fragment == null) {
+            fragment = new AimFragment();
+        }
         return fragment;
     }
 
@@ -66,15 +69,18 @@ public class AimFragment extends Fragment {
         return view;
     }
 
+    // Initialy start thread at beginning
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         controllerView.startRobotControlThread();
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
+    public void start() {
+        controllerView.startRobotControlThread();
+    }
+
+    public void stop() {
         controllerView.stopRobotControlThread();
     }
 }
