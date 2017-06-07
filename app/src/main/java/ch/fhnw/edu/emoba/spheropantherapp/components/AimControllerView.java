@@ -30,6 +30,8 @@ public class AimControllerView extends View {
     private RobotAimControlThread robotControlThread;
     private Handler robotControlHandler;
 
+    private boolean isRunning = false;
+
     public AimControllerView(Context context) {
         super(context);
     }
@@ -42,11 +44,13 @@ public class AimControllerView extends View {
         if (robotControlThread == null) {
             robotControlThread = new RobotAimControlThread("Robot Control", grid);
             robotControlThread.start();
+            isRunning = true;
             Log.i(TAG, "Started Robot Control Thread");
         }
     }
 
     public void stopRobotControlThread() {
+        isRunning = false;
         if (robotControlThread != null) {
             robotControlThread.stopRobot();
             robotControlThread.quit();
@@ -107,20 +111,22 @@ public class AimControllerView extends View {
     }
 
     private void moveRobot(int x, int y) {
-        if (robotControlHandler == null && robotControlThread != null) {
-            robotControlHandler = robotControlThread.getRobotControlThreadHandler();
-        }
+        if (isRunning) {
+            if (robotControlHandler == null && robotControlThread != null) {
+                robotControlHandler = robotControlThread.getRobotControlThreadHandler();
+            }
 
-        if (robotControlHandler != null && robotControlThread != null) {
-            Message msg = robotControlHandler.obtainMessage();
-            msg.what = RobotAimControlThread.POSITION_CHANGED;
+            if (robotControlHandler != null && robotControlThread != null) {
+                Message msg = robotControlHandler.obtainMessage();
+                msg.what = RobotAimControlThread.POSITION_CHANGED;
 
-            Bundle content = new Bundle();
-            content.putInt(RobotAimControlThread.POS_X, x);
-            content.putInt(RobotAimControlThread.POS_Y, y);
+                Bundle content = new Bundle();
+                content.putInt(RobotAimControlThread.POS_X, x);
+                content.putInt(RobotAimControlThread.POS_Y, y);
 
-            msg.setData(content);
-            msg.sendToTarget();
+                msg.setData(content);
+                msg.sendToTarget();
+            }
         }
     }
 }
