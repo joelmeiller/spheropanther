@@ -64,14 +64,14 @@ public class SensorFragment extends Fragment implements RobotControlFragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            if (start) {
-                controllerView.startRobotControlThread();
-                button.setText("Stop Spheropanther");
-            } else {
-                controllerView.stopRobotControlThread();
-                button.setText("Start Spheropanther");
-            }
-            start = !start;
+                if (start) {
+                    controllerView.startRobotControlThread();
+                    button.setText("Stop Spheropanther");
+                } else {
+                    controllerView.stopRobotControlThread();
+                    button.setText("Start Spheropanther");
+                }
+                start = !start;
             }
         });
 

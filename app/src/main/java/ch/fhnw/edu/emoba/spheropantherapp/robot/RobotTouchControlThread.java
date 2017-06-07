@@ -73,23 +73,27 @@ public class RobotTouchControlThread extends HandlerThread {
         @Override
         public void run() {
             if (grid != null) {
-                double velocity = 0f;
-                double direction = 0f;
+                if (y.get() == 0 && x.get() == 0) {
+                    proxy.drive(0, 0);
+                } else {
+                    double velocity = 0f;
+                    double direction = 0f;
 
-                // Calculate velocity
-                Double dX = new Double(grid.getCenterX() - x.get());
-                Double dY = new Double(grid.getCenterY() - y.get());
+                    // Calculate velocity
+                    Double dX = new Double(grid.getCenterX() - x.get());
+                    Double dY = new Double(grid.getCenterY() - y.get());
 
-                double radius = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
-                velocity = (radius > grid.getRadius() ? grid.getRadius() : radius) / grid.getRadius();
+                    double radius = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+                    velocity = (radius > grid.getRadius() ? grid.getRadius() : radius) / grid.getRadius();
 
-                // Calculate direction
-                // Value between 0 and + 360 degrees (clockwise)
-                direction = Math.acos(dY / radius);
-                direction = dX > 0 ? FULL_CIRCLE - direction : direction;
-                int directionDegree = (int) Math.round(direction / Math.PI * 180);
+                    // Calculate direction
+                    // Value between 0 and + 360 degrees (clockwise)
+                    direction = Math.acos(dY / radius);
+                    direction = dX > 0 ? FULL_CIRCLE - direction : direction;
+                    int directionDegree = (int) Math.round(direction / Math.PI * 180);
 
-                proxy.drive(directionDegree, (float) velocity);
+                    proxy.drive(directionDegree, (float) velocity);
+                }
             }
         }
     }

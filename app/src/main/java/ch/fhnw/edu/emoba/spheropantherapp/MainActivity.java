@@ -60,7 +60,10 @@ public class MainActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 Log.d(TAG, "Select Fragment");
                 RobotControlFragment fragment = (RobotControlFragment) mSectionsPagerAdapter.getItem(tab.getPosition());
-                fragment.start();
+
+                if(tab.getPosition() != 2) {
+                    fragment.start();
+                }
             }
 
             @Override
@@ -89,6 +92,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
 
+        // Stop Thread
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        RobotControlFragment fragment = (RobotControlFragment) mSectionsPagerAdapter.getItem(tabLayout.getSelectedTabPosition());
+        fragment.stop();
+
+        // Disconnect Robot
         SpheroRobotProxy proxy = SpheroRobotFactory.getActualRobotProxy();
         proxy.disconnect();
     }
