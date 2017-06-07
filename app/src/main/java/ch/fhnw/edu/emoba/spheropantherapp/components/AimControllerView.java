@@ -111,7 +111,7 @@ public class AimControllerView extends View {
             robotControlHandler = robotControlThread.getRobotControlThreadHandler();
         }
 
-        if (robotControlHandler != null) {
+        if (robotControlHandler != null && robotControlThread != null) {
             Message msg = robotControlHandler.obtainMessage();
             msg.what = RobotAimControlThread.POSITION_CHANGED;
 

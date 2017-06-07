@@ -100,11 +100,11 @@ public class TouchControllerView extends View {
     }
 
     private void moveRobot(int x, int y) {
-        if (robotControlHandler == null) {
+        if (robotControlHandler == null && robotControlThread != null) {
             robotControlHandler = robotControlThread.getRobotControlThreadHandler();
         }
 
-        if (robotControlHandler != null) {
+        if (robotControlHandler != null && robotControlThread != null) {
             Message msg = robotControlHandler.obtainMessage();
             msg.what = RobotTouchControlThread.POSITION_CHANGED;
 

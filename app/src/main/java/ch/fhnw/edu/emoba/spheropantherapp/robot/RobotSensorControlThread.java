@@ -1,6 +1,7 @@
 package ch.fhnw.edu.emoba.spheropantherapp.robot;
 
 import android.hardware.SensorManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Message;
@@ -45,8 +46,6 @@ public class RobotSensorControlThread extends HandlerThread {
 
     private SpheroRobotProxy proxy;
 
-    private ControllerGrid grid;
-
     private SensorValues sensorValues;
 
     class SensorValues implements Serializable {
@@ -70,11 +69,10 @@ public class RobotSensorControlThread extends HandlerThread {
         }
     }
 
-    public RobotSensorControlThread(String name, Handler mainHandler, ControllerGrid grid) {
+    public RobotSensorControlThread(String name, Handler mainHandler) {
         super(name);
 
         this.mainHandler = mainHandler;
-        this.grid = grid;
 
         proxy = SpheroRobotFactory.getActualRobotProxy();
 
@@ -102,23 +100,50 @@ public class RobotSensorControlThread extends HandlerThread {
         Thread thread = new RobotDriverThread();
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         // Run thread each 10 milisecons
-        workerTask = scheduler.scheduleAtFixedRate(thread, 0, 20, TimeUnit.MILLISECONDS);
+        workerTask = scheduler.scheduleAtFixedRate(thread, 0, 50, TimeUnit.MILLISECONDS);
     }
 
     class RobotDriverThread extends Thread {
-        private static final float NS2S = 1.0f / 1000000000.0f;
-        private static final float EPSILON = 0.05f;
-
-        private final float[] deltaRotationVector = new float[4];
-
-        private float lastTimestamp;
 
         @Override
         public void run() {
-            if (grid != null) {
-                // TODO
+
+            double dX = 0.;
+            double dY = 0.;
+
+            if (sensorValues.getRoll() == 0 && sensorValues.getRoll() == 0) {
+                proxy.drive(0, 0);
+            } else {
+                double velocity = 0f;
+                double direction = 0f;
+
+                // Calculate velocity
+                dX = sensorValues.getRoll();
+                dY = sensorValues.getPitch();
+
+                double radius = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+                velocity = radius > 1.0 ? 1.0 : radius;
+
+                // Calculate direction
+                // Value between 0 and + 360 degrees (clockwise)
+                direction = Math.acos(dY);
+                direction = dX > 0 ? FULL_CIRCLE - direction : direction;
+                int directionDegree = 360 - (int) Math.round(direction / Math.PI * 180);
+
+                proxy.drive(directionDegree, (float) velocity);
             }
+
+            Message msg = mainHandler.obtainMessage();
+            msg.what = RobotSensorControlThread.POSITION_CHANGED;
+
+            Bundle content = new Bundle();
+            content.putDouble(POS_X, dX);
+            content.putDouble(POS_Y, dY);
+
+            msg.setData(content);
+            msg.sendToTarget();
         }
+
     }
 
     public Handler getRobotControlThreadHandler() {

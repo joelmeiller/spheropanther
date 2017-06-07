@@ -65,7 +65,13 @@ public class SensorControllerView extends View implements SensorEventListener {
 
                     case RobotSensorControlThread.POSITION_CHANGED:
                         Bundle data = msg.getData();
-                        position = new Point(data.getInt(RobotSensorControlThread.POS_X), data.getInt(RobotSensorControlThread.POS_Y));
+                        double sX = data.getDouble(RobotSensorControlThread.POS_X);
+                        double sY = data.getDouble(RobotSensorControlThread.POS_Y);
+
+                        int posX = (int) (grid.getCenterX() + grid.getRadius() * sX);
+                        int posY = (int) (grid.getCenterY() + grid.getRadius() * sY);
+
+                        position = new Point(posX, posY);
                         postInvalidate();
                         break;
 
@@ -82,7 +88,7 @@ public class SensorControllerView extends View implements SensorEventListener {
 
     public void startRobotControlThread() {
         if (robotControlThread == null) {
-            robotControlThread = new RobotSensorControlThread("Robot Sensor Control", mainHandler, grid);
+            robotControlThread = new RobotSensorControlThread("Robot Sensor Control", mainHandler);
             robotControlThread.start();
             mSensorManager.registerListener(this, mSensorACC, SensorManager.SENSOR_DELAY_NORMAL);
             mSensorManager.registerListener(this, mSensorMAG, SensorManager.SENSOR_DELAY_NORMAL);
@@ -119,8 +125,6 @@ public class SensorControllerView extends View implements SensorEventListener {
                  if (success) {
                      float orientationData[] = new float[3];
                      SensorManager.getOrientation(R, orientationData);
-
-                     Log.d(TAG, "Pitch: " + orientationData[1] + " / Roll: " + orientationData[2]);
 
                      Message msg = robotControlHandler.obtainMessage();
                      msg.what = RobotSensorControlThread.SENSOR_CHANGED;
