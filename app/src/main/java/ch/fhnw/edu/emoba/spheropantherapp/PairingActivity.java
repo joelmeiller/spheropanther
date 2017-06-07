@@ -75,9 +75,9 @@ public class PairingActivity extends AppCompatActivity
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 
-            ActivityCompat.finishAffinity(this);
+            finish();
 
-        } else {
+        } else if(type == SpheroRobotBluetoothNotification.FailedConnect) {
 
             Log.e(TAG, "Connection failed.");
 

@@ -100,7 +100,7 @@ public class RobotSensorControlThread extends HandlerThread {
         Thread thread = new RobotDriverThread();
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         // Run thread each 10 milisecons
-        workerTask = scheduler.scheduleAtFixedRate(thread, 0, 50, TimeUnit.MILLISECONDS);
+        workerTask = scheduler.scheduleAtFixedRate(thread, 0, 20, TimeUnit.MILLISECONDS);
     }
 
     class RobotDriverThread extends Thread {
@@ -121,7 +121,7 @@ public class RobotSensorControlThread extends HandlerThread {
                 dX = sensorValues.getRoll();
                 dY = sensorValues.getPitch();
 
-                double radius = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+                double radius = 0.7 * Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
                 velocity = radius > 1.0 ? 1.0 : radius;
 
                 // Calculate direction
@@ -130,7 +130,7 @@ public class RobotSensorControlThread extends HandlerThread {
                 direction = dX > 0 ? FULL_CIRCLE - direction : direction;
                 int directionDegree = 360 - (int) Math.round(direction / Math.PI * 180);
 
-                proxy.drive(directionDegree, (float) velocity);
+                proxy.drive(directionDegree, (float) (velocity * 0.7));
             }
 
             Message msg = mainHandler.obtainMessage();

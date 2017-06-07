@@ -83,7 +83,7 @@ public class RobotTouchControlThread extends HandlerThread {
                     Double dX = new Double(grid.getCenterX() - x.get());
                     Double dY = new Double(grid.getCenterY() - y.get());
 
-                    double radius = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+                    double radius = 0.7 * Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
                     velocity = (radius > grid.getRadius() ? grid.getRadius() : radius) / grid.getRadius();
 
                     // Calculate direction
