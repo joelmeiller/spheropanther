@@ -1,8 +1,10 @@
 package ch.fhnw.edu.emoba.spheropantherapp.layout;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +19,7 @@ import ch.fhnw.edu.emoba.spheropantherapp.components.AimControllerView;
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * to handle interaction events.
- * Use the {@link AimFragment#newInstance} factory method to
+ * Use the {@link AimFragment#} factory method to
  * create an instance of this fragment.
  */
 public class AimFragment extends Fragment implements RobotControlFragment {
@@ -63,10 +65,29 @@ public class AimFragment extends Fragment implements RobotControlFragment {
             @Override
             public void onClick(View v) {
                 controllerView.setZeroHeading();
+                headingSetDialog();
             }
         });
 
         return view;
+    }
+
+    private void headingSetDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+
+        builder.setTitle(R.string.headingSetTitle);
+        builder.setMessage(R.string.headingSetText);
+
+        // Add the buttons
+        builder.setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // Close dialog (do nothing)
+            }
+        });
+
+        // Create the AlertDialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     // Initialy start thread at beginning

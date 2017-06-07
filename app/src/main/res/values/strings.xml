@@ -10,7 +10,11 @@
     <string name="connectionFailedTitle" type="id">Could not connect</string>
     <string name="connectionFailedText" type="id">Spheropanther could not pair the Spherorobot with your bluetooth connection. Please make sure you have to bluetooth turned on and try again.</string>
 
+    <string name="headingSetTitle" type="id">Zero Heading Set</string>
+    <string name="headingSetText" type="id">The robot is successfully aimed and the zero heading is set. Start having fun :)</string>
+
     <string name="touch_fragment_title">Touch Control</string>
     <string name="aim_fragment_title">Aim Control</string>
     <string name="sensor_fragment_title">Sensor Control</string>
+    <string name="okay">Okay</string>
 </resources>

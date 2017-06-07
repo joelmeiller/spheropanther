@@ -104,7 +104,6 @@ public class SensorControllerView extends View implements SensorEventListener {
     // From source: https://gist.github.com/abdelhady/501f6e48c1f3e32b253a#file-deviceorientation
     @Override
     public void onSensorChanged(SensorEvent event) {
-         Log.d(TAG, "Value: " + event.values[0]);
          if (robotControlHandler != null) {
              // It is good practice to check that we received the proper sensor event
 
@@ -123,17 +122,12 @@ public class SensorControllerView extends View implements SensorEventListener {
 
                      Log.d(TAG, "Pitch: " + orientationData[1] + " / Roll: " + orientationData[2]);
 
-                     float averagePitch = addValue(orientationData[1], pitches);
-                     float averageRoll = addValue(orientationData[2], rolls);
-
-                     Log.d(TAG, "Average Pitch: " + orientationData[1] + " / Roll: " + orientationData[2]);
-
                      Message msg = robotControlHandler.obtainMessage();
                      msg.what = RobotSensorControlThread.SENSOR_CHANGED;
 
                      Bundle content = new Bundle();
-                     content.putFloat(RobotSensorControlThread.PITCH, averagePitch);
-                     content.putFloat(RobotSensorControlThread.ROLL, averageRoll);
+                     content.putFloat(RobotSensorControlThread.PITCH, orientationData[1]);
+                     content.putFloat(RobotSensorControlThread.ROLL, orientationData[2]);
 
                      msg.setData(content);
                      msg.sendToTarget();
