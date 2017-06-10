@@ -27,8 +27,6 @@ public class TouchControllerView extends View {
     private RobotTouchControlThread robotControlThread;
     private Handler robotControlHandler;
 
-    private boolean isRunning;
-
     public TouchControllerView(Context context) {
         super(context);
     }
@@ -37,17 +35,16 @@ public class TouchControllerView extends View {
         if (robotControlThread == null) {
             robotControlThread = new RobotTouchControlThread("Robot Touch Control", grid);
             robotControlThread.start();
-            isRunning = true;
             Log.i(TAG, "Started Robot Control Thread");
         }
     }
 
     public void stopRobotControlThread() {
-        isRunning = false;
         if (robotControlThread != null) {
             robotControlThread.stopRobot();
             robotControlThread.quit();
             robotControlThread = null;
+            robotControlHandler = null;
             Log.i(TAG, "Stopped Robot Control Thread");
         }
     }
@@ -104,22 +101,22 @@ public class TouchControllerView extends View {
     }
 
     private void moveRobot(int x, int y) {
-        if (isRunning) {
-            if (robotControlHandler == null && robotControlThread != null) {
-                robotControlHandler = robotControlThread.getRobotControlThreadHandler();
-            }
 
-            if (robotControlHandler != null && robotControlThread != null) {
-                Message msg = robotControlHandler.obtainMessage();
-                msg.what = RobotTouchControlThread.POSITION_CHANGED;
+        if (robotControlHandler == null && robotControlThread != null) {
+            robotControlHandler = robotControlThread.getRobotControlThreadHandler();
+        }
 
-                Bundle content = new Bundle();
-                content.putInt(RobotTouchControlThread.POS_X, x);
-                content.putInt(RobotTouchControlThread.POS_Y, y);
+        if (robotControlHandler != null) {
+            Message msg = robotControlHandler.obtainMessage();
+            msg.what = RobotTouchControlThread.POSITION_CHANGED;
 
-                msg.setData(content);
-                msg.sendToTarget();
-            }
+            Bundle content = new Bundle();
+            content.putInt(RobotTouchControlThread.POS_X, x);
+            content.putInt(RobotTouchControlThread.POS_Y, y);
+
+            msg.setData(content);
+            msg.sendToTarget();
         }
     }
+
 }

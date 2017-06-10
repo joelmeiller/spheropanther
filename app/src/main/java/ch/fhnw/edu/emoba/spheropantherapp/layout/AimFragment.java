@@ -27,6 +27,8 @@ public class AimFragment extends Fragment implements RobotControlFragment {
     private static AimFragment fragment;
     private AimControllerView controllerView;
 
+    private boolean initialStart = true;
+
     public AimFragment() {
         // Required empty public constructor
     }
@@ -94,7 +96,11 @@ public class AimFragment extends Fragment implements RobotControlFragment {
     @Override
     public void onStart() {
         super.onStart();
-        controllerView.startRobotControlThread();
+        if (initialStart) {
+            Log.d("Aim Fragment", "Start initial Thread");
+            controllerView.startRobotControlThread();
+            initialStart = false;
+        }
     }
 
     public void start() {

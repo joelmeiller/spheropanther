@@ -44,18 +44,17 @@ public class AimControllerView extends View {
         if (robotControlThread == null) {
             robotControlThread = new RobotAimControlThread("Robot Control", grid);
             robotControlThread.start();
-            isRunning = true;
             Log.i(TAG, "Started Robot Control Thread");
         }
     }
 
     public void stopRobotControlThread() {
-        isRunning = false;
         if (robotControlThread != null) {
             robotControlThread.stopRobot();
             robotControlThread.quit();
             robotControlThread = null;
-            Log.i(TAG, "Stopped Robot Control Thread");
+            robotControlHandler = null;
+             Log.i(TAG, "Stopped Robot Control Thread");
         }
     }
 
@@ -67,7 +66,10 @@ public class AimControllerView extends View {
 
         if (width > 0 && height > 0) {
             grid = new AimGrid(getContext(), width, height);
-            robotControlThread.setGrid(grid);
+
+            if (robotControlThread != null) {
+                robotControlThread.setGrid(grid);
+            }
         }
     }
 
@@ -111,22 +113,22 @@ public class AimControllerView extends View {
     }
 
     private void moveRobot(int x, int y) {
-        if (isRunning) {
-            if (robotControlHandler == null && robotControlThread != null) {
-                robotControlHandler = robotControlThread.getRobotControlThreadHandler();
-            }
 
-            if (robotControlHandler != null && robotControlThread != null) {
-                Message msg = robotControlHandler.obtainMessage();
-                msg.what = RobotAimControlThread.POSITION_CHANGED;
+        if (robotControlHandler == null && robotControlThread != null) {
+            robotControlHandler = robotControlThread.getRobotControlThreadHandler();
+        }
 
-                Bundle content = new Bundle();
-                content.putInt(RobotAimControlThread.POS_X, x);
-                content.putInt(RobotAimControlThread.POS_Y, y);
+        if (robotControlHandler != null) {
+            Message msg = robotControlHandler.obtainMessage();
+            msg.what = RobotAimControlThread.POSITION_CHANGED;
 
-                msg.setData(content);
-                msg.sendToTarget();
-            }
+            Bundle content = new Bundle();
+            content.putInt(RobotAimControlThread.POS_X, x);
+            content.putInt(RobotAimControlThread.POS_Y, y);
+
+            msg.setData(content);
+            msg.sendToTarget();
         }
     }
+
 }

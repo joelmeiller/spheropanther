@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
 
         // Stop Thread
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
