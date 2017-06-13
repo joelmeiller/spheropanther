@@ -41,7 +41,11 @@ public class PairingActivity extends AppCompatActivity
 
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         if (bluetoothAdapter == null) {
-            finish();
+            if (Build.PRODUCT.startsWith("sdk")) {
+                connectToRobot();
+            } else {
+                finish();
+            }
         }else{
             if (bluetoothAdapter.isEnabled()) {
                 connectToRobot();
