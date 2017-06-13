@@ -77,7 +77,7 @@ public class PairingActivity extends AppCompatActivity
 
     private void connectToRobot() {
         Boolean onEmulator = Build.PRODUCT.startsWith("sdk");
-        proxy = SpheroRobotFactory.createRobot(true);
+        proxy = SpheroRobotFactory.createRobot(onEmulator);
         proxy.setDiscoveryListener(this);
         proxy.startDiscovering(getApplicationContext());
     }
