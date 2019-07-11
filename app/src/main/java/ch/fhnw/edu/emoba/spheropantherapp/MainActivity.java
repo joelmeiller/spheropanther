@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    private boolean isStart = true;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (MainViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        isStart = true;
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -61,9 +64,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Select Fragment");
                 RobotControlFragment fragment = (RobotControlFragment) mSectionsPagerAdapter.getItem(tab.getPosition());
 
-                if(tab.getPosition() != 2) {
+
+                if (tab.getPosition() != 2) {
                     fragment.start();
                 }
+
             }
 
             @Override

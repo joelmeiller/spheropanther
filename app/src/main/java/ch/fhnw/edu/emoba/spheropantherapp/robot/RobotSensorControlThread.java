@@ -111,7 +111,7 @@ public class RobotSensorControlThread extends HandlerThread {
             double dX = 0.;
             double dY = 0.;
 
-            if (sensorValues.getRoll() == 0 && sensorValues.getRoll() == 0) {
+            if (sensorValues.getRoll() == 0 && sensorValues.getPitch() == 0) {
                 proxy.drive(0, 0);
             } else {
                 double velocity = 0f;
@@ -121,16 +121,16 @@ public class RobotSensorControlThread extends HandlerThread {
                 dX = sensorValues.getRoll();
                 dY = sensorValues.getPitch();
 
-                double radius = 0.7 * Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
-                velocity = radius > 1.0 ? 1.0 : radius;
+                double radius = Math.sqrt(Math.pow(dX, 2) + Math.pow(dY, 2));
+                velocity = 0.7 * radius > 1.0 ? 1.0 : radius;
 
                 // Calculate direction
                 // Value between 0 and + 360 degrees (clockwise)
-                direction = Math.acos(dY);
+                direction = Math.acos(dY / radius);
                 direction = dX > 0 ? FULL_CIRCLE - direction : direction;
                 int directionDegree = 360 - (int) Math.round(direction / Math.PI * 180);
 
-                proxy.drive(directionDegree, (float) (velocity * 0.7));
+                proxy.drive(directionDegree, (float) (Math.pow(velocity, 1.5) / 5));
             }
 
             Message msg = mainHandler.obtainMessage();
@@ -138,7 +138,7 @@ public class RobotSensorControlThread extends HandlerThread {
 
             Bundle content = new Bundle();
             content.putDouble(POS_X, dX);
-            content.putDouble(POS_Y, dY);
+            content.putDouble(POS_Y, -dY);
 
             msg.setData(content);
             msg.sendToTarget();

@@ -92,7 +92,7 @@ public class RobotTouchControlThread extends HandlerThread {
                     direction = dX > 0 ? FULL_CIRCLE - direction : direction;
                     int directionDegree = (int) Math.round(direction / Math.PI * 180);
 
-                    proxy.drive(directionDegree, (float) velocity);
+                    proxy.drive(directionDegree, (float) (Math.pow(velocity, 1.5) / 3));
                 }
             }
         }
