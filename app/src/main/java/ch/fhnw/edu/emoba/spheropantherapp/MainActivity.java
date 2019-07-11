@@ -1,11 +1,8 @@
 package ch.fhnw.edu.emoba.spheropantherapp;
 
 import android.net.Uri;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,14 +12,16 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
-import layout.AimFragment;
-import layout.SensorFragment;
-import layout.TouchFragment;
+import ch.fhnw.edu.emoba.spherolib.SpheroRobotFactory;
+import ch.fhnw.edu.emoba.spherolib.SpheroRobotProxy;
+import ch.fhnw.edu.emoba.spheropantherapp.layout.AimFragment;
+import ch.fhnw.edu.emoba.spheropantherapp.layout.MainViewPager;
+import ch.fhnw.edu.emoba.spheropantherapp.layout.RobotControlFragment;
+import ch.fhnw.edu.emoba.spheropantherapp.layout.SensorFragment;
+import ch.fhnw.edu.emoba.spheropantherapp.layout.TouchFragment;
 
-public class MainActivity extends AppCompatActivity
-        implements AimFragment.OnFragmentInteractionListener, TouchFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
 
     private static String TAG = MainActivity.class.toString();
 
@@ -39,7 +38,7 @@ public class MainActivity extends AppCompatActivity
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    private MainViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +50,34 @@ public class MainActivity extends AppCompatActivity
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (MainViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                Log.d(TAG, "Select Fragment");
+                RobotControlFragment fragment = (RobotControlFragment) mSectionsPagerAdapter.getItem(tab.getPosition());
+
+                if(tab.getPosition() != 2) {
+                    fragment.start();
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+                Log.d(TAG, "Unselect Fragment");
+                RobotControlFragment fragment = (RobotControlFragment) mSectionsPagerAdapter.getItem(tab.getPosition());
+                fragment.stop();
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                // Do nothing
+            }
+        });
     }
 
 
@@ -64,6 +86,20 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Stop Thread
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        RobotControlFragment fragment = (RobotControlFragment) mSectionsPagerAdapter.getItem(tabLayout.getSelectedTabPosition());
+        fragment.stop();
+
+        // Disconnect Robot
+        SpheroRobotProxy proxy = SpheroRobotFactory.getActualRobotProxy();
+        proxy.disconnect();
     }
 
     @Override
@@ -79,11 +115,6 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-        Log.d(TAG, uri.toString());
     }
 
     /**
@@ -102,11 +133,11 @@ public class MainActivity extends AppCompatActivity
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch (position) {
                 case 0:
-                    return (Fragment) AimFragment.newInstance();
+                    return (Fragment) AimFragment.instance();
                 case 1:
-                    return (Fragment) TouchFragment.newInstance();
+                    return (Fragment) TouchFragment.instance();
                 default:
-                    return (Fragment) SensorFragment.newInstance();
+                    return (Fragment) SensorFragment.instance();
             }
         }
 

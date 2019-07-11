@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/pairing_fragment_container"
-        android:name="layout.PairingFragment"
+        android:name="ch.fhnw.edu.emoba.spheropantherapp.layout.PairingFragment"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         tools:layout="@layout/fragment_pairing" />

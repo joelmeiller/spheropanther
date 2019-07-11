@@ -1,12 +1,10 @@
-package layout;
+package ch.fhnw.edu.emoba.spheropantherapp.components;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.support.v4.content.ContextCompat;
-import android.view.MotionEvent;
-import android.view.View;
 
 import ch.fhnw.edu.emoba.spheropantherapp.R;
 
@@ -18,14 +16,22 @@ public class ControllerGrid {
 
     private static String TAG = ControllerGrid.class.toString();
 
-    private static int MARGIN_GRID = 80;
-    private static int RADIUS_GRID = 150;
-    private static int RADIUS_TOUCH = 20;
+    private static int marginGrid = 80;
+    private static int radiusGrid = 150;
+    private static int radiusTouch = 20;
 
 
     private Context context;
     private Paint paint;
     private Point lastPosition;
+
+    private int xC = 0;
+    private int yC = 0;
+
+    public int getCenterX() { return xC; };
+    public int getCenterY() { return yC; };
+    public int getRadius() { return radiusGrid; };
+
 
     public ControllerGrid(Context context) {
         this.context = context;
@@ -34,14 +40,24 @@ public class ControllerGrid {
         lastPosition = new Point(0, 0);
     }
 
+    public ControllerGrid(Context context, int width, int height) {
+        this(context);
+
+        int measureSize = width > height ? height : width;
+
+        radiusGrid = measureSize / 3;
+        marginGrid = (height - (2 * radiusGrid)) / 3;
+        radiusTouch = measureSize / 20;
+
+        xC = (int) width / 2;
+        yC = radiusGrid + marginGrid;
+    }
+
 
     protected void drawGrid(Canvas canvas, Point nextPosition) {
 
-        int xC = (int) canvas.getWidth() / 2;
-        int yC = RADIUS_GRID + MARGIN_GRID;
-
         // Draw controll cross
-        drawControllCross(canvas, xC, yC);
+        drawControllCross(canvas);
 
 
         // Draw position circle
@@ -50,32 +66,32 @@ public class ControllerGrid {
 
         if (nextPosition != null) {
 
-            if (nextPosition.x < RADIUS_TOUCH + 10) {
+            if (nextPosition.x < radiusTouch + 10) {
                 nextPosition.x = lastPosition.x;
-            } else if (nextPosition.x > 2 * (RADIUS_GRID + MARGIN_GRID)) {
+            } else if (nextPosition.x > 2 * (radiusGrid + marginGrid)) {
                 nextPosition.x = lastPosition.x;
             }
 
             lastPosition = nextPosition;
 
             paint.setStyle(Paint.Style.FILL);
-            canvas.drawCircle(lastPosition.x, lastPosition.y, RADIUS_TOUCH, paint);
+            canvas.drawCircle(lastPosition.x, lastPosition.y, radiusTouch, paint);
 
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(4);
-            canvas.drawCircle(lastPosition.x, lastPosition.y, RADIUS_TOUCH + 10, paint);
+            canvas.drawCircle(lastPosition.x, lastPosition.y, radiusTouch + 10, paint);
         } else {
             paint.setStyle(Paint.Style.FILL);
 
-            canvas.drawCircle(xC, yC, RADIUS_TOUCH - 5, paint);
+            canvas.drawCircle(xC, yC, radiusTouch - 5, paint);
 
             paint.setStyle(Paint.Style.STROKE);
             paint.setStrokeWidth(3);
-            canvas.drawCircle(xC, yC, RADIUS_TOUCH, paint);
+            canvas.drawCircle(xC, yC, radiusTouch, paint);
         }
     }
 
-    private void drawControllCross(Canvas canvas, int xC, int yC) {
+    private void drawControllCross(Canvas canvas) {
         // Draw Lines
         // *************
         int color = ContextCompat.getColor(context, R.color.colorLine);
@@ -83,17 +99,17 @@ public class ControllerGrid {
         paint.setStrokeWidth(4);
 
         // Horizontal
-        int xStart = xC - RADIUS_GRID;
+        int xStart = xC - radiusGrid;
         int yStart = yC;
-        int xEnd = xC + RADIUS_GRID;
+        int xEnd = xC + radiusGrid;
         int yEnd = yC;
         canvas.drawLine(xStart, yStart, xEnd, yEnd, paint);
 
         // Vertical
         xStart = xC;
-        yStart = yC - RADIUS_GRID;
+        yStart = yC - radiusGrid;
         xEnd = xC;
-        yEnd = yC + RADIUS_GRID;
+        yEnd = yC + radiusGrid;
         canvas.drawLine(xStart, yStart, xEnd, yEnd, paint);
 
         // Draw Circles
@@ -104,14 +120,14 @@ public class ControllerGrid {
         // Outer circle
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(6);
-        canvas.drawCircle(xC, yC, RADIUS_GRID, paint);
+        canvas.drawCircle(xC, yC, radiusGrid, paint);
 
         // First inner circle
         paint.setStrokeWidth(2);
-        canvas.drawCircle(xC, yC, RADIUS_GRID * 2 / 3, paint);
+        canvas.drawCircle(xC, yC, radiusGrid * 2 / 3, paint);
 
         // Second inner circle
         paint.setStrokeWidth(2);
-        canvas.drawCircle(xC, yC, RADIUS_GRID / 3, paint);
+        canvas.drawCircle(xC, yC, radiusGrid / 3, paint);
     }
 }

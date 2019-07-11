@@ -1,7 +1,5 @@
-package layout;
+package ch.fhnw.edu.emoba.spheropantherapp.layout;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,6 +9,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import ch.fhnw.edu.emoba.spheropantherapp.R;
+import ch.fhnw.edu.emoba.spheropantherapp.components.SensorControllerView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,7 +18,9 @@ import ch.fhnw.edu.emoba.spheropantherapp.R;
  * Use the {@link SensorFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class SensorFragment extends Fragment {
+public class SensorFragment extends Fragment implements RobotControlFragment {
+
+    private static SensorFragment fragment;
 
     private Boolean start = true;
     private SensorControllerView controllerView;
@@ -34,9 +35,10 @@ public class SensorFragment extends Fragment {
      *
      * @return A new instance of fragment AimFragment.
      */
-    public static SensorFragment newInstance() {
-        SensorFragment fragment = new SensorFragment();
-
+    public static SensorFragment instance() {
+        if (fragment == null) {
+            fragment = new SensorFragment();
+        }
         return fragment;
     }
 
@@ -58,30 +60,30 @@ public class SensorFragment extends Fragment {
 
         // Add action listener
         final Button button = (Button) view.findViewById(R.id.sensorButton);
+        button.setText("Start Spheropanther");
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            if (start) {
-                controllerView.start();
-                button.setText("Stop Spheropanther");
-            } else {
-                controllerView.stop();
-                button.setText("Start Spheropanther");
-            }
-            start = !start;
+                if (start) {
+                    controllerView.startRobotControlThread();
+                    button.setText("Stop Spheropanther");
+                } else {
+                    controllerView.stopRobotControlThread();
+                    button.setText("Start Spheropanther");
+                }
+                start = !start;
             }
         });
 
         return view;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
+    public void start() {
+        controllerView.startRobotControlThread();
+    }
 
-        if (controllerView != null){
-            controllerView.stop();
-            start = true;
-        }
+    public void stop() {
+        controllerView.stopRobotControlThread();
+        start = true;
     }
 }

@@ -1,5 +1,6 @@
 package ch.fhnw.edu.emoba.spheropantherapp;
 
+import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ch.fhnw.edu.emoba.spherolib.SpheroRobotDiscoveryListener;
 import ch.fhnw.edu.emoba.spherolib.SpheroRobotFactory;
@@ -23,6 +25,10 @@ public class PairingActivity extends AppCompatActivity
 
     private SpheroRobotProxy proxy;
 
+    BluetoothAdapter bluetoothAdapter;
+
+    final static int REQUEST_BLUETOOTH = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +39,43 @@ public class PairingActivity extends AppCompatActivity
     protected void onStart() {
         super.onStart();
 
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            if (Build.PRODUCT.startsWith("sdk")) {
+                connectToRobot();
+            } else {
+                finish();
+            }
+        }else{
+            if (bluetoothAdapter.isEnabled()) {
+                connectToRobot();
+            }else{
+                Intent bluetoothIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(bluetoothIntent, REQUEST_BLUETOOTH);
+            }
+
+        }
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_BLUETOOTH){
+            if(resultCode==RESULT_OK){
+                Toast.makeText(this, "BlueTooth Turned On", Toast.LENGTH_LONG).show();
+            }else{
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if (bluetoothAdapter.isEnabled()) {
+            connectToRobot();
+        }
+    }
+
+    private void connectToRobot() {
         Boolean onEmulator = Build.PRODUCT.startsWith("sdk");
         proxy = SpheroRobotFactory.createRobot(onEmulator);
         proxy.setDiscoveryListener(this);
@@ -75,9 +118,9 @@ public class PairingActivity extends AppCompatActivity
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 
-            ActivityCompat.finishAffinity(this);
+            finish();
 
-        } else {
+        } else if(type == SpheroRobotBluetoothNotification.FailedConnect) {
 
             Log.e(TAG, "Connection failed.");
 

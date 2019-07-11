@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    tools:context="layout.SensorFragment">
+    tools:context=".layout.SensorFragment">
 
     <TextView
         android:id="@+id/sensorTitle"
@@ -18,22 +18,23 @@
         android:textSize="30sp"
         android:textStyle="bold" />
 
-    <Button
-        android:id="@+id/sensorButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginTop="30dp"
-        android:background="@color/colorLine"
-        android:text="Start Spheropanther" />
-
     <RelativeLayout
         android:id="@+id/sensorControllerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/control_margin">
 
+        <Button
+            android:id="@+id/sensorButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="23dp"
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:background="@color/colorLine"
+            android:text="Start Spheropanther" />
     </RelativeLayout>
 
 </LinearLayout>

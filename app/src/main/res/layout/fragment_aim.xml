@@ -1,10 +1,12 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical"
-    tools:context="layout.AimFragment">
+    tools:context=".layout.AimFragment"
+    android:weightSum="1">
 
     <TextView
         android:id="@+id/aimTitle"
@@ -21,8 +23,20 @@
         android:id="@+id/aimControllerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/control_margin">
+        android:layout_below="@+id/aimTitle">
 
     </RelativeLayout>
 
-</LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/zeroHeadingButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="40dp"
+        android:clickable="true"
+        app:elevation="23dp"
+        app:fabSize="mini"
+        app:srcCompat="@android:drawable/ic_menu_compass" />
+
+</RelativeLayout>
